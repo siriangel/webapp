@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Entry App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Name</h1>
+    <form id="nameForm">
+        <input type="text" id="nameInput" placeholder="Enter your name" required>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Previous Entries</h2>
+    <ul id="nameList"></ul>
+
+    <script>
+        document.getElementById('nameForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                addNameToList(name);
+                saveName(name);
+                nameInput.value = '';
+            }
+        });
+
+        function addNameToList(name) {
+            const nameList = document.getElementById('nameList');
+            const li = document.createElement('li');
+            li.textContent = name;
+            nameList.appendChild(li);
+        }
+
+        function saveName(name) {
+            let names = JSON.parse(localStorage.getItem('names')) || [];
+            names.push(name);
+            localStorage.setItem('names', JSON.stringify(names));
+        }
+
+        function loadNames() {
+            const names = JSON.parse(localStorage.getItem('names')) || [];
+            names.forEach(name => addNameToList(name));
+        }
+
+        window.onload = loadNames;
+    </script>
+</body>
+</html>
